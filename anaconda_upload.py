@@ -28,21 +28,6 @@ def main():
     upload(args.recipe, token=args.token, channel=args.channel, org=args.org)
 
 
-    # repo_tag = os.environ.get('APPVEYOR_REPO_TAG', 'false')
-    # tag_name = os.environ.get('APPVEYOR_REPO_TAG_NAME', '')
-    # token = os.environ.get('ANACONDA_TOKEN', 'NOT_A_TOKEN')
-
-    # if channel is None:
-    #     if repo_tag and tag_name.startswith('v'):
-    #         channel = 'main'
-    #         os.environ['BUILD_STR'] = ''
-    #     else:
-    #         channel = 'dev'
-    #         os.environ['BUILD_STR'] = 'dev'
-
-    # print('Uploading to {channel} channel'.format(channel=channel))
-
-
 def upload(recipe, channel='main', token=None, org=None):
     print('Using python: {prefix}'.format(prefix=sys.prefix))
 
