@@ -31,4 +31,5 @@ install:
 script:
 - conda build ./recipe -c csdms-stack -c conda-forge
 after_success:
-- python anaconda_upload.py ./recipe --channel=main --org=csdms-stack --token=$ANACONDA_TOKEN
+- curl https://raw.githubusercontent.com/csdms/ci-tools/master/anaconda_upload.py > $HOME/anaconda_upload.py
+- python $HOME/anaconda_upload.py ./recipe --channel=main --org=csdms-stack --token=$ANACONDA_TOKEN
