@@ -20,12 +20,17 @@ def main():
                         help='anaconda user/org')
     parser.add_argument('--channel', default='main',
                         help='channel tag for upload')
-    parser.add_argument('--token', default=None,
+    parser.add_argument('--token', type=argparse.FileType('r'),
+                        default=None,
                         help='secret anaconda token')
 
     args = parser.parse_args()
 
-    upload(args.recipe, token=args.token, channel=args.channel, org=args.org)
+    if args.token is not None:
+        token = args.token.read().strip()
+    else:
+        token = None
+    upload(args.recipe, token=token, channel=args.channel, org=args.org)
 
 
 def upload(recipe, channel='main', token=None, org=None):
