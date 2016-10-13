@@ -1,0 +1,43 @@
+{% set name = meta.package.name %}
+{% set home_url = meta.about.home %}
+{% set license = meta.about.license %}
+{% set summary = meta.about.summary %}
+
+# Current Build Status
+
+Linux, OSX: [![Build Status](https://travis-ci.org/{{ org }}/{{ name }}.svg?branch=master)](https://travis-ci.org/{{ org }}/{{ name }})
+
+# About {{ name }}
+
+Home: {{ home_url }}
+
+Package license: {{ license }}
+
+Summary: {{ summary }}
+
+# Installing {{ name }}
+
+To install {{ name }} from the {{ org }} channel with `conda`:
+
+```bash
+$ conda config --add channels conda-forge
+$ conda config --add channels {{ org }}
+```
+
+Once these channels have been activated:
+
+```bash
+$ conda install {{ name }}
+```
+
+It is possible to list all of the versions of {{ name }} available on your
+platform with:
+
+```bash
+$ conda search {{ name }} --channel {{ org }}
+```
+
+# Current release info
+
+Version: [![Anaconda-Server Badge](https://anaconda.org/{{ org }}/{{ name }}/badges/version.svg)](https://anaconda.org/{{ org }}/{{ name }})
+Downloads: [![Anaconda-Server Badge](https://anaconda.org/{{ org }}/{{ name }}/badges/downloads.svg)](https://anaconda.org/{{ org }}/{{ name }})
