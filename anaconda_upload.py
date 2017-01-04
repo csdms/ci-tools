@@ -7,8 +7,7 @@ import subprocess
 import traceback
 import glob
 
-from conda_build.config import Config
-from conda_build.build import bldpkg_path
+from conda_build.render import bldpkg_path
 from conda_build.metadata import MetaData
 
 
@@ -37,7 +36,7 @@ def upload(recipe, channel='main', token=None, org=None):
     print('Using python: {prefix}'.format(prefix=sys.prefix))
 
     meta = MetaData(recipe)
-    file_to_upload = bldpkg_path(meta, Config())
+    file_to_upload = bldpkg_path(meta)
 
     cmd = ['anaconda']
     if token is not None:
