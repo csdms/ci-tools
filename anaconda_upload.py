@@ -45,19 +45,21 @@ def upload(recipe, channel='main', token=None, org=None):
                 '--channel', channel,
                 file_to_upload.decode('utf-8')])
 
-    try:
-        cmd[cmd.index('-t') + 1] = '<the-token>'
-    except ValueError:
-        pass
-    print(' '.join(cmd))
-
     if not os.path.isfile(file_to_upload):
         raise RuntimeError('{name}: not a file'.format(name=file_to_upload))
+
+    cmd_to_print = [item for item in cmd]
+    try:
+        cmd_to_print[cmd_to_print.index('-t') + 1] = '<the-token>'
+    except ValueError:
+        pass
+    print(' '.join(cmd_to_print))
 
     try:
         subprocess.check_call(' '.join(cmd), shell=True)
     except subprocess.CalledProcessError:
-        traceback.print_exc()
+        print('{cmd}: returned non-zero exit status'.format(cmd=cmd_to_print),
+              file=sys.stderr)
 
 
 if __name__ == '__main__':
