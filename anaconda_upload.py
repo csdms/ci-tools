@@ -53,7 +53,9 @@ def upload(recipe, channel='main', token=None, org=None):
         cmd_to_print[cmd_to_print.index('-t') + 1] = '<the-token>'
     except ValueError:
         pass
-    print(' '.join(cmd_to_print))
+    finally:
+        cmd_to_print = ' '.join(cmd_to_print)
+    print(cmd_to_print)
 
     try:
         subprocess.check_call(' '.join(cmd), shell=True)
