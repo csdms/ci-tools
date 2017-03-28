@@ -45,6 +45,10 @@ def upload(recipe, channel='main', token=None, org=None):
                 '--channel', channel,
                 file_to_upload.decode('utf-8')])
 
+    try:
+        cmd[cmd.index('-t') + 1] = '<the-token>'
+    except ValueError:
+        pass
     print(' '.join(cmd))
 
     if not os.path.isfile(file_to_upload):
