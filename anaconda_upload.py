@@ -43,7 +43,7 @@ def upload(recipe, channel='main', token=None, org=None):
         cmd.extend(['-t', token])
     cmd.extend(['upload', '--force', '--user', org,
                 '--channel', channel,
-                file_to_upload.decode('utf-8')])
+                file_to_upload])
 
     if not os.path.isfile(file_to_upload):
         raise RuntimeError('{name}: not a file'.format(name=file_to_upload))
