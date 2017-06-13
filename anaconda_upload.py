@@ -8,7 +8,7 @@ import traceback
 import glob
 
 from conda_build.render import bldpkg_path
-from conda_build.metadata import MetaData
+from conda_build.metadata import MetaData, Config
 
 
 def main():
@@ -22,6 +22,9 @@ def main():
     parser.add_argument('--token', type=argparse.FileType('r'),
                         default=None,
                         help='secret anaconda token')
+    parser.add_argument('--numpy',
+                        default=os.environ.get('NUMPY_VERSION', None),
+                        help='version of numpy used')
 
     args = parser.parse_args()
 
@@ -29,13 +32,15 @@ def main():
         token = args.token.read().strip()
     else:
         token = None
-    upload(args.recipe, token=token, channel=args.channel, org=args.org)
+    upload(args.recipe, token=token, channel=args.channel, org=args.org,
+           numpy=args.numpy)
 
 
-def upload(recipe, channel='main', token=None, org=None):
+def upload(recipe, channel='main', token=None, org=None, numpy=None):
     print('Using python: {prefix}'.format(prefix=sys.prefix))
 
-    meta = MetaData(recipe)
+    config = Config(numpy=numpy) 
+    meta = MetaData(recipe, config=config)
     file_to_upload = bldpkg_path(meta)
 
     cmd = ['anaconda']
