@@ -31,6 +31,9 @@ def main():
                         help='disable addition of requirements hash')
     parser.add_argument('--output', action='store_true',
                         help='print name of file to upload')
+    parser.add_argument('-c', action='append', type=str,
+                        dest='channels',
+                        help='additional channel to search for packages')
 
     args = parser.parse_args()
 
@@ -38,17 +41,23 @@ def main():
         token = args.token.read().strip()
     else:
         token = None
+
+    channels = args.channels + ['csdms-stack', 'conda-forge']
+
     file_to_upload = render(args.recipe, numpy=args.numpy,
-                            filename_hashing=args.filename_hashing)
+                            filename_hashing=args.filename_hashing,
+                            channels=channels)
     if args.output:
         print(file_to_upload)
     else:
-        upload(file_to_upload, token=token, channel=args.channel,
+        upload(file_to_upload, token=token, channel=args.channels,
                org=args.org)
 
 
-def render(recipe, numpy=None, filename_hashing=True):
+def render(recipe, numpy=None, filename_hashing=True, channels=[]):
     config = Config(numpy=numpy, filename_hashing=filename_hashing)
+    config.channel_urls.extend(channels)
+
     meta_tuples = api.render(recipe, config=config)
     file_to_upload = api.get_output_file_paths(meta_tuples, config=config)[0]
 
@@ -69,6 +78,7 @@ def find_alternate(file_to_upload):
 
 def upload(file_to_upload, channel='main', token=None, org=None):
     print('Using python: {prefix}'.format(prefix=sys.prefix))
+    print('File to upload: {fn}'.format(fn=file_to_upload))
 
     if not os.path.isfile(file_to_upload):
         file_to_upload = find_alternate(file_to_upload)
