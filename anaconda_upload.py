@@ -55,8 +55,26 @@ def render(recipe, numpy=None, filename_hashing=True):
     return file_to_upload
 
 
+def find_alternate(file_to_upload):
+    import re, glob
+
+    pattern = re.sub('h[0-9a-f]{7}', 'h*', file_to_upload)
+    alternatives = glob.glob(pattern)
+
+    try:
+        return alternatives[0]
+    except IndexError:
+        return file_to_upload
+
+
 def upload(file_to_upload, channel='main', token=None, org=None):
     print('Using python: {prefix}'.format(prefix=sys.prefix))
+
+    if not os.path.isfile(file_to_upload):
+        file_to_upload = find_alternate(file_to_upload)
+
+    if not os.path.isfile(file_to_upload):
+        raise RuntimeError('{name}: not a file'.format(name=file_to_upload))
 
     cmd = ['anaconda']
     if token is not None:
@@ -64,9 +82,6 @@ def upload(file_to_upload, channel='main', token=None, org=None):
     cmd.extend(['upload', '--force', '--user', org,
                 '--channel', channel,
                 file_to_upload])
-
-    if not os.path.isfile(file_to_upload):
-        raise RuntimeError('{name}: not a file'.format(name=file_to_upload))
 
     cmd_to_print = [item for item in cmd]
     try:
