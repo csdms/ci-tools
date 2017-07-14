@@ -50,7 +50,7 @@ def main():
     if args.output:
         print(file_to_upload)
     else:
-        upload(file_to_upload, token=token, channel=args.channels,
+        upload(file_to_upload, token=token, channel=args.channel,
                org=args.org)
 
 
