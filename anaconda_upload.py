@@ -32,7 +32,7 @@ def main():
     parser.add_argument('--output', action='store_true',
                         help='print name of file to upload')
     parser.add_argument('-c', action='append', type=str,
-                        dest='channels',
+                        dest='channels', default=[],
                         help='additional channel to search for packages')
 
     args = parser.parse_args()
