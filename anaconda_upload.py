@@ -8,7 +8,8 @@ import traceback
 import glob
 
 from conda_build.render import bldpkg_path
-from conda_build.metadata import MetaData, Config
+from conda_build.metadata import Config
+from conda_build import api
 
 
 def main():
@@ -25,6 +26,11 @@ def main():
     parser.add_argument('--numpy',
                         default=os.environ.get('NUMPY_VERSION', None),
                         help='version of numpy used')
+    parser.add_argument('--old-build-string', dest="filename_hashing",
+                        action='store_false',
+                        help='disable addition of requirements hash')
+    parser.add_argument('--output', action='store_true',
+                        help='print name of file to upload')
 
     args = parser.parse_args()
 
@@ -32,16 +38,25 @@ def main():
         token = args.token.read().strip()
     else:
         token = None
-    upload(args.recipe, token=token, channel=args.channel, org=args.org,
-           numpy=args.numpy)
+    file_to_upload = render(args.recipe, numpy=args.numpy,
+                            filename_hashing=args.filename_hashing)
+    if args.output:
+        print(file_to_upload)
+    else:
+        upload(file_to_upload, token=token, channel=args.channel,
+               org=args.org)
 
 
-def upload(recipe, channel='main', token=None, org=None, numpy=None):
+def render(recipe, numpy=None, filename_hashing=True):
+    config = Config(numpy=numpy, filename_hashing=filename_hashing)
+    meta_tuples = api.render(recipe, config=config)
+    file_to_upload = api.get_output_file_paths(meta_tuples, config=config)[0]
+
+    return file_to_upload
+
+
+def upload(file_to_upload, channel='main', token=None, org=None):
     print('Using python: {prefix}'.format(prefix=sys.prefix))
-
-    config = Config(numpy=numpy) 
-    meta = MetaData(recipe, config=config)
-    file_to_upload = bldpkg_path(meta)
 
     cmd = ['anaconda']
     if token is not None:
