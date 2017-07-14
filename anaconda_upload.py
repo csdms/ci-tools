@@ -78,6 +78,7 @@ def find_alternate(file_to_upload):
 
 def upload(file_to_upload, channel='main', token=None, org=None):
     print('Using python: {prefix}'.format(prefix=sys.prefix))
+    print('File to upload: {fn}'.format(fn=file_to_upload))
 
     if not os.path.isfile(file_to_upload):
         file_to_upload = find_alternate(file_to_upload)
