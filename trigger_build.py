@@ -6,11 +6,44 @@ import requests
 
 
 def get_travis_api_url(repo, org='csdms-stack'):
+    '''
+    Get the Travis API URL
+
+    Parameters
+    ----------
+    repo : string
+        repo name
+    org : string
+        organization containing repo (default is 'csdms-stack')
+
+    Returns
+    -------
+    string
+        Travis API URL
+
+    '''
     TRAVIS_API_URL = 'https://api.travis-ci.org/repo/{org}%2F{repo}/requests'
     return TRAVIS_API_URL.format(org=org, repo=repo)
 
 
 def post_to_travis(repo, token, org='csdms-stack'):
+    '''
+    Post to Travis to build a repo
+
+    Parameters
+    ----------
+    repo : string
+        repo name to build
+    token : string
+        secret Travis token
+    org : string
+        organization containing repo (default is 'csdms-stack')
+
+    Returns
+    -------
+    response
+        JSON response
+    '''
     url = get_travis_api_url(repo, org=org)
     headers = {
         'Content-Type': 'application/json',
@@ -36,7 +69,7 @@ def main():
 
     token = args.token_file.read().strip()
     for repo in args.repo:
-        print post_to_travis(repo, org=args.org, token=token).text
+        print(post_to_travis(repo, org=args.org, token=token).text)
 
 
 if __name__ == '__main__':

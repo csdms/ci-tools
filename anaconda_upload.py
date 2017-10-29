@@ -55,6 +55,20 @@ def main():
 
 
 def render(recipe, numpy=None, filename_hashing=True, channels=[]):
+    '''
+    Render recipe
+
+    Parameters
+    ----------
+    recipe : path
+    numpy
+    filename_hashing
+
+    Returns
+    -------
+    path
+        file path of rendered recipe
+    '''
     config = Config(numpy=numpy, filename_hashing=filename_hashing)
     config.channel_urls.extend(channels)
 
@@ -65,6 +79,20 @@ def render(recipe, numpy=None, filename_hashing=True, channels=[]):
 
 
 def find_alternate(file_to_upload):
+    '''
+    Find alternative name for a file to upload
+
+    Parameters
+    ----------
+    file_to_upload : path
+        file to find alternative name for
+
+    Returns
+    -------
+    file : string
+        file to upload
+
+    '''
     import re, glob
 
     pattern = re.sub('h[0-9a-f]{7}', 'h*', file_to_upload)
@@ -77,6 +105,18 @@ def find_alternate(file_to_upload):
 
 
 def upload(file_to_upload, channel='main', token=None, org=None):
+    '''
+    Upload file to Anaconda Cloud
+
+    Parameters
+    ----------
+    channel : string
+       Anaconda Cloud channel to upload file to
+    token :  string
+       Anaconda token or path to file containing token
+    org : string
+       Anaconda Cloud user/organiztion
+    '''
     print('Using python: {prefix}'.format(prefix=sys.prefix))
     print('File to upload: {fn}'.format(fn=file_to_upload))
 
