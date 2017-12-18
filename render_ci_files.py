@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import os
 import sys
+import shutil
 import argparse
 from glob import glob
 
@@ -32,6 +33,13 @@ def main():
 
             with open(base, 'w') as fp:
                 fp.write(template.render(dict(meta=md.meta, org=args.org)))
+
+        else:
+            src = os.path.join(args.templates, name)
+            try:
+                shutil.copytree(src, name)
+            except OSError:
+                shutil.copy(src, name)
 
     return 0
 
